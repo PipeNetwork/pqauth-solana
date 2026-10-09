@@ -1,0 +1,15 @@
+[package]
+name = "pqauth-core"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+description = "Canonical wire formats and domain-separated messages for Solana PQAuth"
+
+[features]
+default = []
+std = []
+
+[lib]
+crate-type = ["rlib"]

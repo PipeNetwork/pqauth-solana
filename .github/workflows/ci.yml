@@ -1,0 +1,44 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.98.1
+          components: rustfmt, clippy
+      - name: Format
+        run: cargo fmt --check
+      - name: Clippy
+        run: cargo clippy --workspace --all-targets -- -D warnings
+      - name: Unit tests
+        run: cargo test --workspace
+
+  independent-vectors:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: State model and static checks
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Regenerate vectors
+        run: |
+          cp tests/vectors.json /tmp/vectors.json
+          python3 tests/generate_vectors.py
+          diff -u /tmp/vectors.json tests/vectors.json
+      - name: Cross-language vector verification
+        run: node tests/verify_vectors.mjs

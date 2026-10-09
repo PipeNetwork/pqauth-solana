@@ -1,0 +1,23 @@
+[package]
+name = "pqauth-cli"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[[bin]]
+name = "pqauth"
+path = "src/main.rs"
+
+[dependencies]
+pqauth-core.workspace = true
+pqauth-client = { path = "../../crates/pqauth-client" }
+solana-program.workspace = true
+ml-dsa.workspace = true
+clap.workspace = true
+hex.workspace = true
+getrandom.workspace = true
+zeroize.workspace = true
+serde_json.workspace = true
